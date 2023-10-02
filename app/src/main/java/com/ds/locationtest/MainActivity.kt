@@ -57,11 +57,11 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun requestNewLocationData() {
-        val locationRequest = LocationRequest.create().apply {
-            interval = 10000
-            fastestInterval = 5000
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
+        val locationRequest =
+            LocationRequest.Builder (/* priority = */ Priority.PRIORITY_HIGH_ACCURACY,/* intervalMillis = */
+            10000)
+
+
 
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -74,93 +74,9 @@ class MainActivity : ComponentActivity() {
             return
         }
         fusedLocationClient.requestLocationUpdates(
-            locationRequest,
+            locationRequest.build(),
             locationCallback,
             null
-        )
+        ) }
     }
-
-
-    /*
-    private val REQUEST_LOCATION_PERMISSION = 1
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult?) {
-            locationResult ?: return
-            for (location in locationResult.locations) {
-                Log.i("Location", "Lat: ${location.latitude}, Lng: ${location.longitude}")
-            }
-        }
-    }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-                if (ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    getPermissions()
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-
-                }
-
-            fusedLocationClient.lastLocation
-                    .addOnSuccessListener { location : Location? ->
-                        if (location != null) {
-                            Log.d("MyLog3", "Локация: Широта: ${location.latitude} " +
-                                    "Долгота: ${location.longitude}")
-                        }
-
-
-            }
-
-        }
-    }
-    @Composable
-    fun getPermissions() {
-        val launcher = rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                // Permission Accepted: Do something
-                Log.d("ExampleScreen", "PERMISSION GRANTED")
-
-            } else {
-                // Permission Denied: Do something
-                Log.d("ExampleScreen", "PERMISSION DENIED")
-            }
-        }
-        val context = LocalContext.current
-
-        Button(
-            onClick = {
-                // Check permission
-                when (PackageManager.PERMISSION_GRANTED) {
-                    ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) -> {
-                        // Some works that require permission
-                        Log.d("ExampleScreen", "Code requires permission")
-                    }
-
-                    else -> {
-                        // Asking for permission
-                        launcher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-                    }
-                }
-            }
-        ) {
-            Text(text = "Check and Request Permission")
-        }
-    }*/
-}
 
